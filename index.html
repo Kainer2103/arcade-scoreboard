@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arcade Scoreboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+background:#000;
+font-family:'Press Start 2P',cursive;
+color:#fff;
+overflow-x:hidden;
+margin:0;
+}
+
+/* CRT Scanlines */
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:repeating-linear-gradient(
+0deg,
+rgba(0,0,0,0.2) 1px,
+transparent 2px
+);
+pointer-events:none;
+z-index:10;
+}
+
+/* Grid */
+.grid{
+position:fixed;
+inset:0;
+background:
+linear-gradient(#ff006e22 1px,transparent 1px),
+linear-gradient(90deg,#00f5ff22 1px,transparent 1px);
+background-size:40px 40px;
+animation:gridMove 12s linear infinite;
+z-index:0;
+}
+
+@keyframes gridMove{
+from{transform:perspective(500px) rotateX(60deg) translateY(0);}
+to{transform:perspective(500px) rotateX(60deg) translateY(100px);}
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:30px;
+position:relative;
+z-index:1;
+}
+
+.frame{
+border:3px solid #00f5ff;
+box-shadow:0 0 20px #00f5ff;
+background:#070015dd;
+padding:20px;
+}
+
+/* Title */
+h1{
+text-align:center;
+color:#00f5ff;
+text-shadow:0 0 10px #00f5ff;
+margin:10px 0;
+}
+
+/* Trophy */
+.trophies{
+text-align:center;
+font-size:28px;
+animation:float 3s infinite ease-in-out;
+}
+
+@keyframes float{
+50%{transform:translateY(-10px);}
+}
+
+/* Header */
+.header,.row{
+display:grid;
+grid-template-columns:60px 140px 90px 90px;
+gap:10px;
+padding:10px;
+font-size:10px;
+}
+
+.header{
+color:#ff006e;
+border-bottom:2px solid #ff006e;
+}
+
+/* Rows */
+.row{
+border:2px solid #b620e0;
+margin:5px 0;
+position:relative;
+transition:.3s;
+}
+
+.row:hover{
+transform:translateX(5px);
+background:#b620e022;
+}
+
+.rank-1{border-color:#ffff00;}
+.rank-2{border-color:#00f5ff;}
+.rank-3{border-color:#ff006e;}
+
+.score-bar{
+position:absolute;
+left:0;
+bottom:0;
+height:3px;
+background:linear-gradient(90deg,#ff006e,#00f5ff);
+}
+
+.insert{
+text-align:center;
+margin-top:20px;
+color:#ffff00;
+animation:blink 1.5s infinite;
+}
+
+@keyframes blink{
+50%{opacity:0;}
+}
+
+.loading{
+text-align:center;
+padding:30px;
+color:#00f5ff;
+}
+
+.error{
+text-align:center;
+padding:30px;
+color:#ff006e;
+}
+
+@media(max-width:600px){
+.header,.row{
+grid-template-columns:50px 100px 70px 70px;
+font-size:8px;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="grid"></div>
+
+<div class="container">
+<div class="frame">
+
+<h1>HIGH SCORE</h1>
+<div class="trophies">🏆 👑 🏆</div>
+
+<div id="board"></div>
+
+<div class="insert">▲ INSERT COIN ▲</div>
+
+</div>
+</div>
+
+<script>
+
+/* =============================
+   GOOGLE SHEET CSV LINK
+============================= */
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQzWlByVkCzcn8bGO9kPYH7eKkBJwDsPJjTqotjaWmOCopmy0rjA5b-RlVQ__pEBxDtHIpaUut19E5z/pub?output=csv";
+
+const board = document.getElementById("board");
+let lastTop = null;
+
+/* Loading UI */
+function showLoading(){
+board.innerHTML='<div class="loading">LOADING...</div>';
+}
+
+/* Error UI */
+function showError(){
+board.innerHTML='<div class="error">FAILED TO LOAD</div>';
+}
+
+/* Parse CSV */
+function parseCSV(text){
+const rows=text.trim().split("\n").slice(1);
+return rows.map(r=>{
+const c=r.split(",");
+return{
+date:c[1],
+score:+c[2],
+level:c[3]
+};
+});
+}
+
+/* Beep */
+function beep(){
+const ctx=new AudioContext();
+const o=ctx.createOscillator();
+o.type="square";
+o.frequency.value=440;
+o.connect(ctx.destination);
+o.start();
+o.stop(ctx.currentTime+.1);
+}
+
+/* Confetti */
+function confetti(){
+for(let i=0;i<30;i++){
+let d=document.createElement("div");
+d.style.position="fixed";
+d.style.width="6px";
+d.style.height="6px";
+d.style.background=["#ff006e","#00f5ff","#ffff00"][i%3];
+d.style.left=Math.random()*100+"vw";
+d.style.top="-10px";
+d.style.transition="2s linear";
+document.body.appendChild(d);
+setTimeout(()=>{d.style.top="110vh";d.style.opacity=0;},10);
+setTimeout(()=>d.remove(),2000);
+}
+}
+
+/* Render */
+function render(data){
+
+data.sort((a,b)=>b.score-a.score);
+const top=data.slice(0,10);
+const max=Math.max(...top.map(x=>x.score),1);
+
+board.innerHTML=`
+<div class="header">
+<div>RANK</div>
+<div>DATE</div>
+<div>SCORE</div>
+<div>LEVEL</div>
+</div>`;
+
+top.forEach((r,i)=>{
+let pct=r.score/max*100;
+board.innerHTML+=`
+<div class="row rank-${i+1}">
+<div>#${i+1}</div>
+<div>${r.date}</div>
+<div>${r.score}</div>
+<div>${r.level}</div>
+<div class="score-bar" style="width:${pct}%"></div>
+</div>`;
+});
+
+const avg=Math.round(data.reduce((s,x)=>s+x.score,0)/data.length||0);
+
+board.innerHTML+=`
+<div style="margin-top:15px;text-align:center;font-size:9px;color:#00f5ff">
+RUNS: ${data.length} | AVG: ${avg}
+</div>`;
+
+if(lastTop!==null && top[0].score>lastTop) confetti();
+lastTop=top[0].score;
+
+beep();
+}
+
+/* Fetch */
+async function load(){
+showLoading();
+try{
+const r=await fetch(CSV_URL+"?t="+Date.now());
+const t=await r.text();
+render(parseCSV(t));
+}catch(e){
+showError();
+}
+}
+
+load();
+setInterval(load,30000);
+
+</script>
+
+</body>
+</html>
