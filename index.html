@@ -258,17 +258,22 @@ function parseCSV(text){
     const data = rows.map(r=>{
         const c = r.split(",");
         return {
-            rank: c[0],
-            date: c[1],
-            score: Number(c[2])
+            date: c[0],
+            score: Number(c[1])
         };
     });
 
-    // 🔥 automatisch sortieren
+    // sortieren nach Score
     data.sort((a,b)=>b.score-a.score);
+
+    // Rang automatisch vergeben
+    data.forEach((row,i)=>{
+        row.rank = "#" + (i+1);
+    });
 
     return data;
 }
+
 
 /* Beep */
 function beep(){
