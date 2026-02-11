@@ -85,7 +85,7 @@ animation:float 3s infinite ease-in-out;
 /* Header */
 .header,.row{
 display:grid;
-grid-template-columns:60px 140px 90px 90px;
+grid-template-columns:60px 150px 100px;
 gap:10px;
 padding:10px;
 font-size:10px;
@@ -252,15 +252,22 @@ board.innerHTML='<div class="error">FAILED TO LOAD</div>';
 
 /* Parse CSV */
 function parseCSV(text){
-const rows=text.trim().split("\n").slice(1);
-return rows.map(r=>{
-const c=r.split(",");
-return{
-date:c[1],
-score:+c[2],
-level:c[3]
-};
-});
+
+    const rows = text.trim().split("\n").slice(1);
+
+    const data = rows.map(r=>{
+        const c = r.split(",");
+        return {
+            rank: c[0],
+            date: c[1],
+            score: Number(c[2])
+        };
+    });
+
+    // 🔥 automatisch sortieren
+    data.sort((a,b)=>b.score-a.score);
+
+    return data;
 }
 
 /* Beep */
@@ -303,7 +310,6 @@ board.innerHTML=`
 <div>RANK</div>
 <div>DATE</div>
 <div>SCORE</div>
-<div>LEVEL</div>
 </div>`;
 
 top.forEach((r,i)=>{
@@ -313,7 +319,6 @@ board.innerHTML+=`
 <div>#${i+1}</div>
 <div>${r.date}</div>
 <div>${r.score}</div>
-<div>${r.level}</div>
 <div class="score-bar" style="width:${pct}%"></div>
 </div>`;
 });
