@@ -9,6 +9,121 @@
 
 <style>
 
+.arcade-wrapper{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.arcade-cabinet{
+    width:500px;
+    background:linear-gradient(#111,#000);
+    border-radius:20px;
+    padding:20px;
+    box-shadow:
+        0 0 60px #000,
+        inset 0 0 20px rgba(255,255,255,0.05);
+}
+
+/* Marquee */
+.marquee{
+    text-align:center;
+    padding:15px;
+    font-size:18px;
+    color:#00f5ff;
+    text-shadow:0 0 10px #00f5ff;
+}
+
+/* Screen Frame */
+.screen-frame{
+    position:relative;
+    background:#111;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:
+        inset 0 0 40px #000,
+        0 0 30px #00f5ff;
+}
+
+/* Glass Effect */
+.screen-glass{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        120deg,
+        rgba(255,255,255,0.15) 0%,
+        rgba(255,255,255,0.05) 40%,
+        rgba(255,255,255,0) 60%
+    );
+    pointer-events:none;
+    border-radius:15px;
+}
+
+/* Screen Content */
+.screen-content{
+    position:relative;
+    background:#000;
+    padding:10px;
+    border-radius:10px;
+}
+
+/* Control Panel */
+.control-panel{
+    margin-top:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    background:#111;
+    border-radius:15px;
+}
+
+/* Joystick */
+.joystick{
+    position:relative;
+    width:60px;
+    height:60px;
+}
+
+.stick{
+    width:8px;
+    height:40px;
+    background:#333;
+    position:absolute;
+    bottom:10px;
+    left:26px;
+}
+
+.ball{
+    width:25px;
+    height:25px;
+    background:#ff0055;
+    border-radius:50%;
+    position:absolute;
+    bottom:45px;
+    left:17px;
+    box-shadow:0 0 15px #ff0055;
+}
+
+/* Buttons */
+.buttons{
+    display:flex;
+    gap:15px;
+}
+
+.btn{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    box-shadow:0 0 15px currentColor;
+}
+
+.red{ background:#ff0040; color:#ff0040; }
+.yellow{ background:#ffea00; color:#ffea00; }
+.blue{ background:#00e5ff; color:#00e5ff; }
+
+
 body {
     margin: 0;
     background-image: url("https://images.unsplash.com/photo-1511512578047-dfb367046420");
@@ -211,26 +326,48 @@ font-size:8px;
 
 <body>
 
-<div class="grid"></div>
+<div class="arcade-wrapper">
 
-<div class="arcade-cabinet">
-  <div class="arcade-screen">
-    <div class="container">
+    <div class="arcade-cabinet">
 
-<div class="frame">
+        <div class="marquee">
+            ARCADE BOARD
+        </div>
 
-<h1>HIGH SCORE</h1>
-<div class="trophies">🏆 👑 🏆</div>
+        <div class="screen-frame">
+            <div class="screen-glass"></div>
+            <div class="screen-content">
+                <div class="grid"></div>
+                <div class="container">
+                    <div class="frame">
+                        <h1>HIGH SCORE</h1>
+                        <div class="trophies">🏆 👑 🏆</div>
+                        <div id="board"></div>
+                        <div class="insert">▲ INSERT COIN ▲</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div id="board"></div>
+        <div class="control-panel">
+            <div class="joystick">
+                <div class="stick"></div>
+                <div class="ball"></div>
+            </div>
 
-<div class="insert">▲ INSERT COIN ▲</div>
+            <div class="buttons">
+                <div class="btn red"></div>
+                <div class="btn yellow"></div>
+                <div class="btn blue"></div>
+            </div>
+        </div>
 
-      </div>
     </div>
-</div>
 
 </div>
+
+</body>
+
 
 <script>
 
