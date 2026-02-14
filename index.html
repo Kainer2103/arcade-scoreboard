@@ -411,18 +411,6 @@ function parseCSV(text){
     return data;
 }
 
-
-/* Beep */
-function beep(){
-const ctx=new AudioContext();
-const o=ctx.createOscillator();
-o.type="square";
-o.frequency.value=440;
-o.connect(ctx.destination);
-o.start();
-o.stop(ctx.currentTime+.1);
-}
-
 /* Confetti */
 function confetti(){
 for(let i=0;i<30;i++){
@@ -475,7 +463,6 @@ RUNS: ${data.length} | AVG: ${avg}
 if(lastTop!==null && top[0].score>lastTop) confetti();
 lastTop=top[0].score;
 
-beep();
 }
 
 /* Fetch */
@@ -489,6 +476,92 @@ render(parseCSV(t));
 showError();
 }
 }
+
+/* =============================
+   ARCADE AMBIENT SOUND
+============================= */
+
+let audioStarted = false;
+let audioCtx;
+
+function startArcadeAmbient(){
+
+if(audioStarted) return;
+audioStarted = true;
+
+audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+/* MASTER GAIN */
+const master = audioCtx.createGain();
+master.gain.value = 0.15; // Gesamtlautstärke
+master.connect(audioCtx.destination);
+
+/* ===== PAD (Hintergrundfläche) ===== */
+
+const padOsc = audioCtx.createOscillator();
+const padGain = audioCtx.createGain();
+const padFilter = audioCtx.createBiquadFilter();
+
+padOsc.type = "sawtooth";
+padOsc.frequency.value = 110; // tiefer Ton
+
+padFilter.type = "lowpass";
+padFilter.frequency.value = 800;
+
+padGain.gain.value = 0.1;
+
+padOsc.connect(padFilter);
+padFilter.connect(padGain);
+padGain.connect(master);
+
+padOsc.start();
+
+/* ===== ARCADE MELODY ===== */
+
+const melodyNotes = [220, 277, 330, 392]; // A minor vibe
+let noteIndex = 0;
+
+function playMelody(){
+
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+
+osc.type = "square";
+osc.frequency.value = melodyNotes[noteIndex];
+
+gain.gain.value = 0.05;
+
+osc.connect(gain);
+gain.connect(master);
+
+osc.start();
+osc.stop(audioCtx.currentTime + 0.2);
+
+noteIndex = (noteIndex + 1) % melodyNotes.length;
+}
+
+setInterval(playMelody, 800);
+
+/* ===== subtle random glitch tone ===== */
+
+setInterval(()=>{
+if(Math.random() > 0.7){
+const glitch = audioCtx.createOscillator();
+const gGain = audioCtx.createGain();
+glitch.type="triangle";
+glitch.frequency.value = 600 + Math.random()*400;
+gGain.gain.value = 0.02;
+glitch.connect(gGain);
+gGain.connect(master);
+glitch.start();
+glitch.stop(audioCtx.currentTime + 0.1);
+}
+},3000);
+
+}
+
+/* Start on first user interaction */
+document.addEventListener("click", startArcadeAmbient);
 
 load();
 setInterval(load,30000);
