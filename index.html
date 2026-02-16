@@ -539,23 +539,18 @@ font-size:8px;
     </div>
 
     <div class="control-panel">
-    <div class="joystick">
-  <div class="base"></div>
-  <div class="stick" id="stick"></div>
-  <div class="ball" id="ball"></div>
-</div>
 
-      </div>
+  <div class="joystick">
+    <div class="base"></div>
+    <div class="stick" id="stick"></div>
+    <div class="ball" id="ball"></div>
+  </div>
 
-     <div class="buttons">
-  <div class="button-ring"><div class="btn"></div></div>
-  <div class="button-ring"><div class="btn"></div></div>
-  <div class="button-ring"><div class="btn"></div></div>
-  <div class="button-ring"><div class="btn"></div></div>
-</div>
-      </div>
-    </div>
-
+  <div class="buttons">
+    <div class="button-ring"><div class="btn"></div></div>
+    <div class="button-ring"><div class="btn"></div></div>
+    <div class="button-ring"><div class="btn"></div></div>
+    <div class="button-ring"><div class="btn"></div></div>
   </div>
 
 </div>
@@ -771,23 +766,25 @@ const screen = document.querySelector(".screen-content");
 document.addEventListener("keydown", (e)=>{
 
   if(e.key === "ArrowDown"){
-    e.preventDefault(); // ⛔ verhindert Window Scroll
+    e.preventDefault();   // verhindert Seiten-Scroll
     screen.scrollBy({top:80, behavior:"smooth"});
-    stick.style.transform = "rotateX(25deg) rotateZ(8deg)";
-    ball.style.transform = "translateY(6px)";
+
+    stick.style.transform = "rotate(10deg)";
+    ball.style.transform = "translateY(8px)";
   }
 
   if(e.key === "ArrowUp"){
-    e.preventDefault(); // ⛔ verhindert Window Scroll
+    e.preventDefault();   // verhindert Seiten-Scroll
     screen.scrollBy({top:-80, behavior:"smooth"});
-    stick.style.transform = "rotateX(-25deg) rotateZ(-8deg)";
-    ball.style.transform = "translateY(-6px)";
+
+    stick.style.transform = "rotate(-10deg)";
+    ball.style.transform = "translateY(-8px)";
   }
 
 });
 
 document.addEventListener("keyup", ()=>{
-  stick.style.transform = "rotateX(0deg)";
+  stick.style.transform = "rotate(0deg)";
   ball.style.transform = "translateY(0px)";
 });
 
