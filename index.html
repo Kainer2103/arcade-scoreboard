@@ -18,15 +18,14 @@ body {
     font-family: 'Press Start 2P', cursive;
     color: #fff;
     overflow-x: hidden;
-    overflow: hidden;
-    height: 100vh;
 }
+
 
 /* Title */
 h1{
 text-align:center;
 color:#00f5ff;
-text-shadow:0 0 10px #00f5ff;
+text-shadow:0 0 10px #00f5ff; 
 margin:10px 0;
 }
 
@@ -68,9 +67,70 @@ transform:translateX(5px);
 background:#b620e022;
 }
 
-.rank-1{border-color:#ffff00;}
-.rank-2{border-color:#00f5ff;}
-.rank-3{border-color:#ff006e;}
+/* ===== TOP 3 MEDAL STYLE ===== */
+
+/* 🥇 GOLD */
+.rank-1{
+  border:2px solid;
+  border-image: linear-gradient(
+    45deg,
+    #fff6b7,
+    #fdd835,
+    #ffb300,
+    #fdd835,
+    #fff6b7
+  ) 1;
+  box-shadow:
+    0 0 12px rgba(255,215,0,0.6),
+    inset 0 0 10px rgba(255,255,255,0.15);
+}
+
+.rank-1 div:first-child{
+  color:#ffd700;
+  text-shadow:0 0 8px #ffd700;
+}
+
+/* 🥈 SILBER */
+.rank-2{
+  border:2px solid;
+  border-image: linear-gradient(
+    45deg,
+    #ffffff,
+    #dcdcdc,
+    #a8a8a8,
+    #dcdcdc,
+    #ffffff
+  ) 1;
+  box-shadow:
+    0 0 10px rgba(200,200,200,0.5),
+    inset 0 0 8px rgba(255,255,255,0.1);
+}
+
+.rank-2 div:first-child{
+  color:#e0e0e0;
+  text-shadow:0 0 6px #ffffff;
+}
+
+/* 🥉 BRONZE */
+.rank-3{
+  border:2px solid;
+  border-image: linear-gradient(
+    45deg,
+    #e6b17a,
+    #c68642,
+    #8c4a1c,
+    #c68642,
+    #e6b17a
+  ) 1;
+  box-shadow:
+    0 0 10px rgba(205,127,50,0.6),
+    inset 0 0 8px rgba(255,255,255,0.08);
+}
+
+.rank-3 div:first-child{
+  color:#cd7f32;
+  text-shadow:0 0 6px #cd7f32;
+}
 
 .score-bar{
 position:absolute;
@@ -325,39 +385,56 @@ font-size:8px;
   filter:blur(8px);
 }
 
-/* Joystick */
+/* ===== BIG REALISTIC JOYSTICK ===== */
+
 .joystick{
   position:relative;
-  width:70px;
-  height:70px;
+  width:110px;
+  height:110px;
+}
+
+.base{
+  position:absolute;
+  bottom:0;
+  left:15px;
+  width:80px;
+  height:20px;
+  background:linear-gradient(#222,#000);
+  border-radius:10px;
+  box-shadow:
+    inset 0 0 10px #000,
+    0 6px 12px rgba(0,0,0,0.9);
 }
 
 .stick{
   position:absolute;
-  bottom:15px;
-  left:31px;
-  width:10px;
-  height:50px;
-  background:linear-gradient(#444,#111);
-  border-radius:4px;
+  bottom:20px;
+  left:50px;
+  width:14px;
+  height:70px;
+  background:linear-gradient(#555,#111);
+  border-radius:6px;
+  transform-origin:bottom center;
+  transition:transform 0.15s ease;
   box-shadow:
     inset -2px -4px 6px rgba(0,0,0,0.6),
-    0 4px 8px rgba(0,0,0,0.8);
+    0 6px 10px rgba(0,0,0,0.8);
 }
 
 .ball{
   position:absolute;
-  bottom:55px;
-  left:22px;
-  width:26px;
-  height:26px;
+  bottom:80px;
+  left:36px;
+  width:40px;
+  height:40px;
   background:radial-gradient(circle at 30% 30%,
-    #ff2a2a,
-    #a00000 70%);
+    #ff3a3a,
+    #b00000 70%);
   border-radius:50%;
+  transition:transform 0.15s ease;
   box-shadow:
-    inset -3px -3px 6px rgba(0,0,0,0.6),
-    0 4px 10px rgba(0,0,0,0.8);
+    inset -4px -6px 10px rgba(0,0,0,0.6),
+    0 6px 14px rgba(0,0,0,0.8);
 }
 
 /* Buttons */
@@ -460,9 +537,12 @@ font-size:8px;
     </div>
 
     <div class="control-panel">
-      <div class="joystick">
-        <div class="stick"></div>
-        <div class="ball"></div>
+    <div class="joystick">
+  <div class="base"></div>
+  <div class="stick" id="stick"></div>
+  <div class="ball" id="ball"></div>
+</div>
+
       </div>
 
      <div class="buttons">
@@ -677,6 +757,35 @@ document.addEventListener("click", startArcadeAmbient);
 
 load();
 setInterval(load,30000);
+
+/* =============================
+   JOYSTICK CONTROL
+============================= */
+
+const stick = document.getElementById("stick");
+const ball = document.getElementById("ball");
+const screen = document.querySelector(".screen-content");
+
+document.addEventListener("keydown", (e)=>{
+
+  if(e.key === "ArrowDown"){
+    screen.scrollBy({top:80, behavior:"smooth"});
+    stick.style.transform = "rotateX(25deg)";
+    ball.style.transform = "translateY(6px)";
+  }
+
+  if(e.key === "ArrowUp"){
+    screen.scrollBy({top:-80, behavior:"smooth"});
+    stick.style.transform = "rotateX(-25deg)";
+    ball.style.transform = "translateY(-6px)";
+  }
+
+});
+
+document.addEventListener("keyup", ()=>{
+  stick.style.transform = "rotateX(0deg)";
+  ball.style.transform = "translateY(0px)";
+});
 
 </script>
 
