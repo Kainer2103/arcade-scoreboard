@@ -411,13 +411,15 @@ font-size:8px;
 .stick{
   position:absolute;
   bottom:20px;
-  left:50px;
-  width:14px;
-  height:70px;
-  background:linear-gradient(#555,#111);
+  left:53px;
+  width:12px;
+  height:75px;
+  background:linear-gradient(#666,#111);
   border-radius:6px;
+
   transform-origin:bottom center;
-  transition:transform 0.15s ease;
+  transition:transform 0.12s cubic-bezier(.2,.8,.4,1);
+
   box-shadow:
     inset -2px -4px 6px rgba(0,0,0,0.6),
     0 6px 10px rgba(0,0,0,0.8);
@@ -425,18 +427,22 @@ font-size:8px;
 
 .ball{
   position:absolute;
-  bottom:80px;
-  left:36px;
+  bottom:90px;
+  left:40px;
   width:40px;
   height:40px;
+
   background:radial-gradient(circle at 30% 30%,
     #ff3a3a,
-    #b00000 70%);
+    #a00000 70%);
+
   border-radius:50%;
-  transition:transform 0.15s ease;
+
+  transition:transform 0.12s cubic-bezier(.2,.8,.4,1);
+
   box-shadow:
     inset -4px -6px 10px rgba(0,0,0,0.6),
-    0 6px 14px rgba(0,0,0,0.8);
+    0 8px 16px rgba(0,0,0,0.9);
 }
 
 /* Buttons */
@@ -766,19 +772,19 @@ const screen = document.querySelector(".screen-content");
 document.addEventListener("keydown", (e)=>{
 
   if(e.key === "ArrowDown"){
-    e.preventDefault();   // verhindert Seiten-Scroll
+    e.preventDefault();
     screen.scrollBy({top:80, behavior:"smooth"});
 
-    stick.style.transform = "rotate(10deg)";
-    ball.style.transform = "translateY(8px)";
+    stick.style.transform = "rotate(12deg)";
+    ball.style.transform = "translateY(6px)";
   }
 
   if(e.key === "ArrowUp"){
-    e.preventDefault();   // verhindert Seiten-Scroll
+    e.preventDefault();
     screen.scrollBy({top:-80, behavior:"smooth"});
 
-    stick.style.transform = "rotate(-10deg)";
-    ball.style.transform = "translateY(-8px)";
+    stick.style.transform = "rotate(-12deg)";
+    ball.style.transform = "translateY(-6px)";
   }
 
 });
