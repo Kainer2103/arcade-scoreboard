@@ -18,6 +18,8 @@ body {
     font-family: 'Press Start 2P', cursive;
     color: #fff;
     overflow-x: hidden;
+    overflow: hidden;
+    height:100%;
 }
 
 
@@ -769,14 +771,16 @@ const screen = document.querySelector(".screen-content");
 document.addEventListener("keydown", (e)=>{
 
   if(e.key === "ArrowDown"){
+    e.preventDefault(); // ⛔ verhindert Window Scroll
     screen.scrollBy({top:80, behavior:"smooth"});
-    stick.style.transform = "rotateX(25deg)";
+    stick.style.transform = "rotateX(25deg) rotateZ(8deg)";
     ball.style.transform = "translateY(6px)";
   }
 
   if(e.key === "ArrowUp"){
+    e.preventDefault(); // ⛔ verhindert Window Scroll
     screen.scrollBy({top:-80, behavior:"smooth"});
-    stick.style.transform = "rotateX(-25deg)";
+    stick.style.transform = "rotateX(-25deg) rotateZ(-8deg)";
     ball.style.transform = "translateY(-6px)";
   }
 
