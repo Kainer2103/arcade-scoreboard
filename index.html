@@ -19,6 +19,7 @@ body {
     color: #fff;
     overflow-x: hidden;
     overflow: hidden;
+    height: 100vh;
 }
 
 /* Title */
@@ -265,6 +266,11 @@ font-size:8px;
   border-radius:4px;
   padding:10px;
   box-shadow:inset 0 0 60px rgba(0,0,0,0.9);
+
+  height: 420px;              /* feste Bildschirmhöhe */
+  overflow-y: auto;           /* internes Scrollen */
+  overflow-x: hidden;
+  position:relative;
 }
 
 .screen-content::after{
@@ -279,8 +285,17 @@ font-size:8px;
   );
 }
 
-.screen-content{
-  position:relative;
+.screen-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.screen-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.screen-content::-webkit-scrollbar-thumb {
+  background: rgba(0,245,255,0.3);
+  border-radius: 3px;
 }
 
 /* Control Panel */
