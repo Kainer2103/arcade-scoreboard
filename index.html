@@ -776,7 +776,6 @@ document.addEventListener("keydown", (e)=>{
     screen.scrollBy({top:80, behavior:"smooth"});
 
     stick.style.transform = "rotate(12deg)";
-    ball.style.transform = "translateY(6px)";
   }
 
   if(e.key === "ArrowUp"){
@@ -784,14 +783,12 @@ document.addEventListener("keydown", (e)=>{
     screen.scrollBy({top:-80, behavior:"smooth"});
 
     stick.style.transform = "rotate(-12deg)";
-    ball.style.transform = "translateY(-6px)";
   }
 
 });
 
 document.addEventListener("keyup", ()=>{
   stick.style.transform = "rotate(0deg)";
-  ball.style.transform = "translateY(0px)";
 });
 
 </script>
