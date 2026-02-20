@@ -393,6 +393,15 @@ font-size:8px;
   position:relative;
   width:110px;
   height:110px;
+  perspective:600px;
+}
+
+.stick-wrapper{
+  position:absolute;
+  bottom:20px;
+  left:53px;
+  transform-origin: bottom center;
+  transition: transform 0.12s cubic-bezier(.2,.8,.4,1);
 }
 
 .base{
@@ -410,16 +419,10 @@ font-size:8px;
 
 .stick{
   position:absolute;
-  bottom:20px;
-  left:53px;
   width:12px;
   height:75px;
   background:linear-gradient(#666,#111);
   border-radius:6px;
-
-  transform-origin:bottom center;
-  transition:transform 0.12s cubic-bezier(.2,.8,.4,1);
-
   box-shadow:
     inset -2px -4px 6px rgba(0,0,0,0.6),
     0 6px 10px rgba(0,0,0,0.8);
@@ -548,8 +551,9 @@ font-size:8px;
 
   <div class="joystick">
     <div class="base"></div>
-    <div class="stick" id="stick"></div>
-    <div class="ball" id="ball"></div>
+    <div class="stick-wrapper" id="stickWrapper">
+    <div class="stick"></div>
+    <div class="ball"></div>
   </div>
 
   <div class="buttons">
@@ -765,30 +769,26 @@ setInterval(load,30000);
    JOYSTICK CONTROL
 ============================= */
 
-const stick = document.getElementById("stick");
-const ball = document.getElementById("ball");
-const screen = document.querySelector(".screen-content");
+const stickWrapper = document.getElementById("stickWrapper");
 
 document.addEventListener("keydown", (e)=>{
 
   if(e.key === "ArrowDown"){
     e.preventDefault();
     screen.scrollBy({top:80, behavior:"smooth"});
-
-    stick.style.transform = "rotate(12deg)";
+    stickWrapper.style.transform = "rotateX(25deg)";
   }
 
   if(e.key === "ArrowUp"){
     e.preventDefault();
     screen.scrollBy({top:-80, behavior:"smooth"});
-
-    stick.style.transform = "rotate(-12deg)";
+    stickWrapper.style.transform = "rotateX(-25deg)";
   }
 
 });
 
 document.addEventListener("keyup", ()=>{
-  stick.style.transform = "rotate(0deg)";
+  stickWrapper.style.transform = "rotateX(0deg)";
 });
 
 </script>
