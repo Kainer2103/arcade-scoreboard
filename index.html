@@ -690,21 +690,24 @@ document.addEventListener("keydown", (e)=>{
   if(e.key === "ArrowDown"){
     e.preventDefault();
     screen.scrollBy({top:80, behavior:"smooth"});
-    stickWrapper.style.transform = "rotateX(25deg)";
+    stickWrapper.style.transform = "translateY(6px) rotate(8deg)";
   }
 
   if(e.key === "ArrowUp"){
     e.preventDefault();
     screen.scrollBy({top:-80, behavior:"smooth"});
-    stickWrapper.style.transform = "rotateX(-25deg)";
+    stickWrapper.style.transform = "translateY(-6px) rotate(-8deg)";
   }
 
 });
 
 document.addEventListener("keyup", ()=>{
-  stickWrapper.style.transform = "rotateX(0deg)";
+  stickWrapper.style.transform = "translateY(0px) rotate(0deg)";
 });
 
+/* =============================
+   Music Player
+============================= */
 const music = document.getElementById("bgMusic");
 
 document.addEventListener("click", () => {
@@ -720,6 +723,8 @@ document.addEventListener("click", () => {
   }, 100);
 }, { once: true });
 
+load();
+setInterval(load, 30000);
 </script>
 
 </body>
