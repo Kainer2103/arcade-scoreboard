@@ -392,6 +392,7 @@ font-size:8px;
   position:relative;
   width:110px;
   height:110px;
+  perspective:800px;
 }
 
 .base{
@@ -685,19 +686,19 @@ document.addEventListener("keydown", (e)=>{
   if(e.key === "ArrowDown"){
     e.preventDefault();
     screen.scrollBy({top:80, behavior:"smooth"});
-    stick.style.transform = "rotate(10deg)";
+    stick.style.transform = "rotateX(25deg)";
   }
 
   if(e.key === "ArrowUp"){
     e.preventDefault();
     screen.scrollBy({top:-80, behavior:"smooth"});
-    stick.style.transform = "rotate(-10deg)";
+    stick.style.transform = "rotateX(-25deg)";
   }
 
 });
 
 document.addEventListener("keyup", ()=>{
-  stick.style.transform = "rotate(0deg)";
+  stick.style.transform = "rotateX(0deg)";
 });
 
 /* =============================
