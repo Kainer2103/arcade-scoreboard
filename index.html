@@ -708,11 +708,17 @@ board.innerHTML+=`
 </div>`;
 });
 
+const total = data.reduce((sum, entry) => sum + entry.score, 0);
 const avg=Math.round(data.reduce((s,x)=>s+x.score,0)/data.length||0);
 
 board.innerHTML+=`
-<div style="margin-top:15px;text-align:center;font-size:9px;color:#00f5ff">
-RUNS: ${data.length} | AVG: ${avg}
+<div style="margin-top:15px;text-align:center;font-size:10px;">
+  <div style="color:#ffcc00; margin-bottom:5px;">
+    ★ TOTAL SCORE: ${total}
+  </div>
+  <div style="color:#00f5ff; font-size:9px;">
+    RUNS: ${data.length} | AVG: ${avg}
+  </div>
 </div>`;
 
 if(lastTop!==null && top[0].score>lastTop) confetti();
