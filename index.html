@@ -388,20 +388,10 @@ font-size:8px;
 }
 
 /* ===== BIG REALISTIC JOYSTICK ===== */
-
 .joystick{
   position:relative;
   width:110px;
   height:110px;
-  perspective:600px;
-}
-
-.stick-wrapper{
-  position:absolute;
-  bottom:20px;
-  left:53px;
-  transform-origin: bottom center;
-  transition: transform 0.12s cubic-bezier(.2,.8,.4,1);
 }
 
 .base{
@@ -419,10 +409,16 @@ font-size:8px;
 
 .stick{
   position:absolute;
+  bottom:20px;
+  left:54px;
   width:12px;
   height:75px;
   background:linear-gradient(#666,#111);
   border-radius:6px;
+
+  transform-origin: bottom center;
+  transition: transform 0.15s ease;
+
   box-shadow:
     inset -2px -4px 6px rgba(0,0,0,0.6),
     0 6px 10px rgba(0,0,0,0.8);
@@ -430,7 +426,7 @@ font-size:8px;
 
 .ball{
   position:absolute;
-  bottom:75px;
+  top:-25px;
   left:-14px;
   width:40px;
   height:40px;
@@ -440,8 +436,6 @@ font-size:8px;
     #a00000 70%);
 
   border-radius:50%;
-
-  transition:transform 0.12s cubic-bezier(.2,.8,.4,1);
 
   box-shadow:
     inset -4px -6px 10px rgba(0,0,0,0.6),
@@ -552,11 +546,12 @@ font-size:8px;
     <div class="control-panel">
 
   <div class="joystick">
-    <div class="base"></div>
-    <div class="stick-wrapper" id="stickWrapper">
-    <div class="stick"></div>
+  <div class="base"></div>
+  <div class="stick">
     <div class="ball"></div>
   </div>
+</div>
+
 
   <div class="buttons">
     <div class="button-ring"><div class="btn"></div></div>
@@ -633,7 +628,7 @@ setTimeout(()=>d.remove(),2000);
 function render(data){
 
 data.sort((a,b)=>b.score-a.score);
-const top=data.slice(0,10);
+const top=data;
 const max=Math.max(...top.map(x=>x.score),1);
 
 board.innerHTML=`
@@ -682,7 +677,7 @@ showError();
    JOYSTICK CONTROL
 ============================= */
 
-const stickWrapper = document.getElementById("stickWrapper");
+const stick = document.querySelector(".stick");
 const screen = document.querySelector(".screen-content");
 
 document.addEventListener("keydown", (e)=>{
@@ -690,19 +685,19 @@ document.addEventListener("keydown", (e)=>{
   if(e.key === "ArrowDown"){
     e.preventDefault();
     screen.scrollBy({top:80, behavior:"smooth"});
-    stickWrapper.style.transform = "translateY(6px) rotate(8deg)";
+    stick.style.transform = "rotate(10deg)";
   }
 
   if(e.key === "ArrowUp"){
     e.preventDefault();
     screen.scrollBy({top:-80, behavior:"smooth"});
-    stickWrapper.style.transform = "translateY(-6px) rotate(-8deg)";
+    stick.style.transform = "rotate(-10deg)";
   }
 
 });
 
 document.addEventListener("keyup", ()=>{
-  stickWrapper.style.transform = "translateY(0px) rotate(0deg)";
+  stick.style.transform = "rotate(0deg)";
 });
 
 /* =============================
