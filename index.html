@@ -587,15 +587,12 @@ font-size:8px;
       <div class="screen-inner">
         <div class="screen-content">
 
-  <iframe
+  <video 
   id="arcadeCutscene"
-  src="https://streamable.com/e/i7xpgg?autoplay=1&muted=1"
-  width="100%"
-  height="100%"
-  frameborder="0"
-  allow="autoplay; fullscreen"
-  style="display:none;">
-</iframe>
+  style="display:none; width:100%; height:100%; object-fit:cover;"
+  preload="auto">
+  <source src="motive-video.mp4" type="video/mp4">
+</video>
           
           <!-- DEIN BOARD BEGINNT HIER -->
           <div class="container">
@@ -807,13 +804,36 @@ const scoreContainer = document.querySelector(".container");
 
 playBtn.addEventListener("click", () => {
 
+  // Scoreboard ausblenden
   scoreContainer.style.display = "none";
+
+  // Musik stoppen
   music.pause();
   music.currentTime = 0;
 
+  // Scroll deaktivieren
   screen.style.overflow = "hidden";
 
+  // CRT-Flicker kurz verstärken (optional)
+  screen.style.animation = "none";
+  screen.offsetHeight; 
+  screen.style.animation = "crtFlicker 0.05s infinite";
+
+  // Video anzeigen & starten
   cutscene.style.display = "block";
+  cutscene.play();
+});
+
+cutscene.addEventListener("ended", () => {
+
+  cutscene.style.display = "none";
+  scoreContainer.style.display = "block";
+
+  screen.style.overflow = "auto";
+
+  screen.style.animation = "crtFlicker 0.12s infinite";
+
+  music.play();
 });
 
 </script>
