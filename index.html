@@ -821,12 +821,15 @@ function enterVideoMode() {
   scoreContainer.style.display = "none";
   screen.style.overflow = "hidden";
 
-  // Musik stoppen
   music.pause();
   music.currentTime = 0;
 
   cutscene.style.display = "block";
-  cutscene.play();
+
+  cutscene.muted = false;  // wichtig!
+  cutscene.play().catch(err => {
+    console.log("Video blocked:", err);
+  });
 }
 
 function exitVideoMode() {
@@ -845,8 +848,10 @@ function exitVideoMode() {
   }
 }
 
-playBtn.addEventListener("click", () => {
-  e.stopPropagation(); // verhindert globalen Click
+playBtn.addEventListener("click", (e) => {
+  e.stopPropagation();   // verhindert globalen Click
+  e.preventDefault();
+
   if (!isVideoMode) {
     enterVideoMode();
   } else {
