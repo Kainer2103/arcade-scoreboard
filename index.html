@@ -586,6 +586,12 @@ font-size:8px;
     <div class="screen-bezel">
       <div class="screen-inner">
         <div class="screen-content">
+
+  <video id="arcadeCutscene" 
+       style="display:none; width:100%; height:100%; object-fit:cover;"
+       preload="auto">
+  <source src="https://drive.google.com/uc?export=download&id=1RPgSz3mWDVk1pnglqKi_-BlltfE6TRMP" type="video/mp4">
+</video>
           
           <!-- DEIN BOARD BEGINNT HIER -->
           <div class="container">
@@ -616,7 +622,8 @@ font-size:8px;
     <div class="button-ring"><div class="btn"></div></div>
     <div class="button-ring"><div class="btn"></div></div>
     <div class="button-ring"><div class="btn"></div></div>
-    <div class="button-ring"><div class="btn"></div></div>
+    <div class="button-ring"><div class="btn" id="playCutscene"></div>
+</div>
   </div>
 
 </div>
@@ -785,6 +792,45 @@ document.addEventListener("click", () => {
 
 load();
 setInterval(load, 30000);
+
+/* =============================
+   VIDEO MODE
+============================= */
+
+const cutscene = document.getElementById("arcadeCutscene");
+const playBtn = document.getElementById("playCutscene");
+const scoreContainer = document.querySelector(".container");
+
+playBtn.addEventListener("click", () => {
+
+  // Scoreboard verstecken
+  scoreContainer.style.display = "none";
+
+  // Musik stoppen
+  music.pause();
+  music.currentTime = 0;
+
+  // Scroll deaktivieren
+  screen.style.overflow = "hidden";
+
+  // Video anzeigen
+  cutscene.style.display = "block";
+  cutscene.play();
+
+});
+
+// Wenn Video endet → zurück zum Scoreboard
+cutscene.addEventListener("ended", () => {
+
+  cutscene.style.display = "none";
+  scoreContainer.style.display = "block";
+
+  screen.style.overflow = "auto";
+
+  music.play();
+
+});
+
 </script>
 
 </body>
