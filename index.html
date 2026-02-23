@@ -631,6 +631,24 @@ font-size:8px;
 
 <script>
 
+const music = document.getElementById("bgMusic");
+
+document.querySelector(".arcade-cabinet").addEventListener("click", () => {
+  if (!musicStarted) {
+    music.volume = 0;
+    music.play();
+    musicStarted = true;
+
+    let fade = setInterval(() => {
+      if (music.volume < 0.4) {
+        music.volume += 0.02;
+      } else {
+        clearInterval(fade);
+      }
+    }, 100);
+  }
+}, { once: true });
+
 /* =============================
    GOOGLE SHEET CSV LINK
 ============================= */
