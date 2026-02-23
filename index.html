@@ -776,20 +776,23 @@ document.addEventListener("keyup", ()=>{
 /* =============================
    Music Player
 ============================= */
-const music = document.getElementById("bgMusic");
+let musicStarted = false;
 
 document.addEventListener("click", () => {
-  music.volume = 0;
-  music.play();
+  if (!musicStarted) {
+    music.volume = 0;
+    music.play();
+    musicStarted = true;
 
-  let fade = setInterval(() => {
-    if (music.volume < 0.4) {
-      music.volume += 0.02;
-    } else {
-      clearInterval(fade);
-    }
-  }, 100);
-}, { once: true });
+    let fade = setInterval(() => {
+      if (music.volume < 0.4) {
+        music.volume += 0.02;
+      } else {
+        clearInterval(fade);
+      }
+    }, 100);
+  }
+});
 
 load();
 setInterval(load, 30000);
@@ -798,43 +801,49 @@ setInterval(load, 30000);
    VIDEO MODE
 ============================= */
 
+let isVideoMode = false;
 const cutscene = document.getElementById("arcadeCutscene");
 const playBtn = document.getElementById("playCutscene");
 const scoreContainer = document.querySelector(".container");
 
-playBtn.addEventListener("click", () => {
+function enterVideoMode() {
+  isVideoMode = true;
 
-  // Scoreboard ausblenden
   scoreContainer.style.display = "none";
+  screen.style.overflow = "hidden";
 
   // Musik stoppen
   music.pause();
   music.currentTime = 0;
 
-  // Scroll deaktivieren
-  screen.style.overflow = "hidden";
-
-  // CRT-Flicker kurz verstärken (optional)
-  screen.style.animation = "none";
-  screen.offsetHeight; 
-  screen.style.animation = "crtFlicker 0.05s infinite";
-
-  // Video anzeigen & starten
   cutscene.style.display = "block";
   cutscene.play();
-});
+}
 
-cutscene.addEventListener("ended", () => {
+function exitVideoMode() {
+  isVideoMode = false;
 
+  cutscene.pause();
+  cutscene.currentTime = 0;
   cutscene.style.display = "none";
-  scoreContainer.style.display = "block";
 
+  scoreContainer.style.display = "block";
   screen.style.overflow = "auto";
 
-  screen.style.animation = "crtFlicker 0.12s infinite";
-
+  // Musik nur starten wenn User schon geklickt hat
   music.play();
+}
+
+playBtn.addEventListener("click", () => {
+  if (!isVideoMode) {
+    enterVideoMode();
+  } else {
+    exitVideoMode();
+  }
 });
+
+// Wenn Video endet → automatisch zurück
+cutscene.addEventListener("ended", exitVideoMode);
 
 </script>
 
