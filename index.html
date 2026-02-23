@@ -633,22 +633,6 @@ font-size:8px;
 
 const music = document.getElementById("bgMusic");
 
-document.querySelector(".arcade-cabinet").addEventListener("click", () => {
-  if (!musicStarted) {
-    music.volume = 0;
-    music.play();
-    musicStarted = true;
-
-    let fade = setInterval(() => {
-      if (music.volume < 0.4) {
-        music.volume += 0.02;
-      } else {
-        clearInterval(fade);
-      }
-    }, 100);
-  }
-}, { once: true });
-
 /* =============================
    GOOGLE SHEET CSV LINK
 ============================= */
@@ -794,9 +778,13 @@ document.addEventListener("keyup", ()=>{
 /* =============================
    Music Player
 ============================= */
+/* =============================
+   Music Player
+============================= */
+
 let musicStarted = false;
 
-document.addEventListener("click", () => {
+function startMusic() {
   if (!musicStarted) {
     music.volume = 0;
     music.play();
@@ -810,7 +798,10 @@ document.addEventListener("click", () => {
       }
     }, 100);
   }
-});
+}
+
+// Startet Musik beim ERSTEN Klick irgendwo
+document.addEventListener("click", startMusic, { once: true });
 
 load();
 setInterval(load, 30000);
@@ -848,11 +839,14 @@ function exitVideoMode() {
   scoreContainer.style.display = "block";
   screen.style.overflow = "auto";
 
-  // Musik nur starten wenn User schon geklickt hat
-  music.play();
+  // Musik nur wieder starten wenn sie schon erlaubt ist
+  if (musicStarted) {
+    music.play();
+  }
 }
 
 playBtn.addEventListener("click", () => {
+  e.stopPropagation(); // verhindert globalen Click
   if (!isVideoMode) {
     enterVideoMode();
   } else {
