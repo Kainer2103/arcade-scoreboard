@@ -564,6 +564,42 @@ font-size:8px;
   box-shadow:inset 0 0 40px #000;
 }
 
+/* ===== VIDEO ACTION BUTTON ===== */
+#playCutscene{
+  background: radial-gradient(
+    circle at 30% 30%,
+    #00f5ff 0%,
+    #0088ff 60%,
+    #002f6c 100%
+  );
+
+  box-shadow:
+    0 0 12px #00f5ff,
+    0 0 25px rgba(0,245,255,0.5),
+    0 6px 0 #002f6c,
+    0 8px 12px rgba(0,0,0,0.8),
+    inset -4px -6px 8px rgba(0,0,0,0.6),
+    inset 3px 3px 6px rgba(255,255,255,0.2);
+
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* Pulsierender Arcade Glow */
+@keyframes pulseGlow{
+  0%   { box-shadow: 0 0 10px #00f5ff; }
+  50%  { box-shadow: 0 0 25px #00f5ff; }
+  100% { box-shadow: 0 0 10px #00f5ff; }
+}
+
+.btn-label{
+  position:absolute;
+  top:8px;
+  left:11px;
+  font-size:14px;
+  color:white;
+  pointer-events:none;
+}
+
 </style>
 </head>
 
@@ -574,6 +610,7 @@ font-size:8px;
 </video>
 
   <audio id="bgMusic" src="05. Silver.mp3" loop></audio>
+  <audio id="btnSound" src="button-click.mp3"></audio>
 
 <div class="arcade-scene">
 
@@ -624,6 +661,7 @@ font-size:8px;
     <div class="button-ring"><div class="btn"></div></div>
     <div class="button-ring"><div class="btn"></div></div>
     <div class="button-ring"><div class="btn" id="playCutscene"></div>
+      <span class="btn-label">▶</span>
 </div>
   </div>
 
@@ -861,6 +899,15 @@ playBtn.addEventListener("click", (e) => {
 
 // Wenn Video endet → automatisch zurück
 cutscene.addEventListener("ended", exitVideoMode);
+
+const btnSound = document.getElementById("btnSound");
+
+document.querySelectorAll(".btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    btnSound.currentTime = 0;
+    btnSound.play();
+  });
+});
 
 </script>
 
