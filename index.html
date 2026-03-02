@@ -747,6 +747,9 @@ function parseCSV(text){
         row.rank = "#" + (i+1);
     });
 
+  return data;
+}
+
 function applyFilter(data){
 
   const now = new Date();
@@ -767,7 +770,7 @@ function applyFilter(data){
     });
   }
 
-    return data;
+  return data;
 }
 
 /* Confetti */
@@ -822,7 +825,7 @@ board.innerHTML+=`
     TOTAL SCORE: ${total}
   </div>
   <div style="color:#00f5ff; font-size:9px;">
-    RUNS: ${data.length} | AVG: ${avg}
+    RUNS: ${filtered.length} | AVG: ${avg}
   </div>
 </div>`;
 
