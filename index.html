@@ -756,7 +756,8 @@ function applyFilter(data){
 
   if(currentFilter === "week"){
     return data.filter(entry => {
-      const d = new Date(entry.date.split(".").reverse().join("-"));
+      const parts = entry.date.split(".");
+      const d = new Date("20" + parts[2], parts[1]-1, parts[0]);
       const diff = (now - d) / (1000*60*60*24);
       return diff <= 7;
     });
@@ -764,7 +765,8 @@ function applyFilter(data){
 
   if(currentFilter === "month"){
     return data.filter(entry => {
-      const d = new Date(entry.date.split(".").reverse().join("-"));
+      const parts = entry.date.split(".");
+      const d = new Date("20" + parts[2], parts[1]-1, parts[0]);
       const diff = (now - d) / (1000*60*60*24);
       return diff <= 30;
     });
