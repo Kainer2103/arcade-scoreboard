@@ -754,25 +754,34 @@ function applyFilter(data){
 
   const now = new Date();
 
-  if(currentFilter === "week"){
-    return data.filter(entry => {
-      const parts = entry.date.split(".");
-      const d = new Date("20" + parts[2], parts[1]-1, parts[0]);
-      const diff = (now - d) / (1000*60*60*24);
-      return diff <= 7;
-    });
-  }
+  return data.filter(entry => {
 
-  if(currentFilter === "month"){
-    return data.filter(entry => {
-      const parts = entry.date.split(".");
-      const d = new Date("20" + parts[2], parts[1]-1, parts[0]);
-      const diff = (now - d) / (1000*60*60*24);
-      return diff <= 30;
-    });
-  }
+    const parts = entry.date.split(".");
+    const d = new Date("20" + parts[2], parts[1]-1, parts[0]);
 
-  return data;
+    if(currentFilter === "week") {
+
+      const today = new Date();
+      const day = today.getDay();
+
+      const monday = new Date(today);
+      monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1));
+      monday.setHours(0,0,0,0);
+
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+      sunday.setHours(23,59,59,999);
+
+      return d >= monday && d <= sunday;
+    }
+
+    if(currentFilter === "month") {
+      return d.getMonth() === now.getMonth() &&
+             d.getFullYear() === now.getFullYear();
+    }
+
+    return true;
+  });
 }
 
 /* Confetti */
