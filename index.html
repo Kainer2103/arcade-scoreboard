@@ -602,6 +602,32 @@ font-size:8px;
   pointer-events:none;
 }
 
+.filters{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin-bottom:10px;
+  font-size:8px;
+}
+
+.filters span{
+  cursor:pointer;
+  padding:4px 8px;
+  border:1px solid #444;
+  color:#888;
+  transition:0.2s;
+}
+
+.filters span:hover{
+  color:#00f5ff;
+  border-color:#00f5ff;
+}
+
+.filters .active{
+  color:#ffcc00;
+  border-color:#ffcc00;
+}
+
 </style>
 </head>
 
@@ -636,6 +662,11 @@ font-size:8px;
           <!-- DEIN BOARD BEGINNT HIER -->
           <div class="container">
             <div class="frame">
+              <div class="filters">
+                <span data-filter="all" class="active">ALL</span>
+                <span data-filter="month">MONTH</span>
+                <span data-filter="week">WEEK</span>
+              </div>
               <h1>HIGH SCORE</h1>
               <div class="trophies">🏆 👑 🏆</div>
               <div id="board"></div>
@@ -683,6 +714,7 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzWlByVkCzcn8b
 
 const board = document.getElementById("board");
 let lastTop = null;
+let currentFilter = "all"; // all | month | week
 
 /* Loading UI */
 function showLoading(){
@@ -715,6 +747,26 @@ function parseCSV(text){
         row.rank = "#" + (i+1);
     });
 
+function applyFilter(data){
+
+  const now = new Date();
+
+  if(currentFilter === "week"){
+    return data.filter(entry => {
+      const d = new Date(entry.date.split(".").reverse().join("-"));
+      const diff = (now - d) / (1000*60*60*24);
+      return diff <= 7;
+    });
+  }
+
+  if(currentFilter === "month"){
+    return data.filter(entry => {
+      const d = new Date(entry.date.split(".").reverse().join("-"));
+      const diff = (now - d) / (1000*60*60*24);
+      return diff <= 30;
+    });
+  }
+
     return data;
 }
 
@@ -738,8 +790,9 @@ setTimeout(()=>d.remove(),2000);
 /* Render */
 function render(data){
 
-data.sort((a,b)=>b.score-a.score);
-const top=data;
+const filtered = applyFilter(data);
+filtered.sort((a,b)=>b.score-a.score);
+const top = filtered;
 const max=Math.max(...top.map(x=>x.score),1);
 
 board.innerHTML=`
@@ -760,8 +813,8 @@ board.innerHTML+=`
 </div>`;
 });
 
-const total = data.reduce((sum, entry) => sum + entry.score, 0);
-const avg=Math.round(data.reduce((s,x)=>s+x.score,0)/data.length||0);
+const total = filtered.reduce((sum, entry) => sum + entry.score, 0);
+const avg = Math.round(filtered.reduce((s,x)=>s+x.score,0)/filtered.length || 0);
 
 board.innerHTML+=`
 <div style="margin-top:15px;text-align:center;font-size:10px;">
@@ -910,6 +963,20 @@ document.querySelectorAll(".btn").forEach(btn => {
   btn.addEventListener("click", () => {
     btnSound.currentTime = 0;
     btnSound.play();
+  });
+});
+
+document.querySelectorAll(".filters span").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+
+    currentFilter = btn.dataset.filter;
+
+    document.querySelectorAll(".filters span")
+      .forEach(b=>b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    load(); // Board neu rendern
   });
 });
 
