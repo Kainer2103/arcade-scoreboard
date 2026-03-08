@@ -998,6 +998,7 @@ renderHeatmap(data);
 
 function renderHeatmap(data){
 
+  const tooltip = document.getElementById("heatTooltip");
   const grid = document.getElementById("heatmapGrid");
   grid.innerHTML = "";
 
@@ -1016,43 +1017,47 @@ function renderHeatmap(data){
     const entry = data.find(e=>e.date===dateString);
 
     const cell = document.createElement("div");
-    cell.classList.add("heatCell");
-    const tooltip = document.getElementById("heatTooltip");
+cell.classList.add("heatCell");
 
-    if(entry){
-
+if(entry){
   const color = getScoreColor(entry.score);
   cell.style.background = color;
+}
 
-  cell.addEventListener("mouseenter",(e)=>{
+cell.addEventListener("mouseenter",(e)=>{
 
-    tooltip.style.display="block";
+  tooltip.style.display="block";
+
+  if(entry){
     tooltip.innerHTML =
       entry.date + "<br>" +
       "Score: " + entry.score;
+  }else{
+    tooltip.innerHTML =
+      dateString + "<br>" +
+      "No Data";
+  }
 
-  });
+});
 
-  cell.addEventListener("mousemove",(e)=>{
+cell.addEventListener("mousemove",(e)=>{
 
-    tooltip.style.left = e.clientX + 15 + "px";
-    tooltip.style.top = e.clientY + 15 + "px";
+  tooltip.style.left = e.clientX + 15 + "px";
+  tooltip.style.top = e.clientY + 15 + "px";
 
-  });
+});
 
-  cell.addEventListener("mouseleave",()=>{
+cell.addEventListener("mouseleave",()=>{
 
-    tooltip.style.display="none";
+  tooltip.style.display="none";
 
-  });
+});
 
 }
 
     grid.appendChild(cell);
 
   }
-
-}
 
 /* Fetch */
 async function load(){
