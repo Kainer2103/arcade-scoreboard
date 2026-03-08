@@ -998,6 +998,9 @@ renderHeatmap(data);
 
 function renderHeatmap(data){
 
+  const today = new Date();
+  const day = today.getDay();
+  const offset = day === 0 ? 6 : day - 1;
   const tooltip = document.getElementById("heatTooltip");
   const grid = document.getElementById("heatmapGrid");
 
@@ -1005,7 +1008,7 @@ function renderHeatmap(data){
 
   const today = new Date();
 
-  for(let i=83;i>=0;i--){
+  for(let i=83 + offset;i>=offset;i--)
 
     const d = new Date();
     d.setDate(today.getDate()-i);
