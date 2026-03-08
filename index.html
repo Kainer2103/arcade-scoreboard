@@ -661,21 +661,30 @@ font-size:8px;
   width:100%;
   height:100%;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
 }
 
+.heatTitle{
+  font-size:10px;
+  color:#00f5ff;
+  margin-bottom:12px;
+  text-shadow:0 0 6px #00f5ff;
+}
+
 #heatmapGrid{
   display:grid;
-  grid-template-columns: repeat(53, 10px);
-  grid-template-rows: repeat(7, 10px);
-  gap:3px;
+  grid-template-columns: repeat(12, 18px);
+  grid-template-rows: repeat(7, 18px);
+  gap:5px;
 }
 
 .heatCell{
-  width:10px;
-  height:10px;
+  width:18px;
+  height:18px;
   background:#111;
+  border-radius:2px;
 }
 
 .heatLow{
@@ -723,7 +732,13 @@ font-size:8px;
  
 <!-- HEATMAP SCREEN -->
 <div id="heatmapScreen" style="display:none;">
+  
+  <div class="heatTitle">
+    LAST 12 WEEKS
+  </div>
+
   <div id="heatmapGrid"></div>
+
 </div>
           <!-- DEIN BOARD BEGINNT HIER -->
           <div class="container">
@@ -926,7 +941,7 @@ function renderHeatmap(data){
 
   const today = new Date();
 
-  for(let i=364;i>=0;i--){
+  for(let i=83;i>=0;i--){
 
     const d = new Date();
     d.setDate(today.getDate()-i);
@@ -957,6 +972,7 @@ function renderHeatmap(data){
 
     grid.appendChild(cell);
   }
+
 }
 
 /* Fetch */
