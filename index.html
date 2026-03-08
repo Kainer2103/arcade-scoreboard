@@ -657,6 +657,33 @@ font-size:8px;
   border-color:#ffcc00;
 }
 
+#heatmap{
+  margin-top:20px;
+  display:grid;
+  grid-template-columns: repeat(26, 8px);
+  grid-auto-flow: column;
+  gap:3px;
+  justify-content:center;
+}
+
+.heat-day{
+  width:8px;
+  height:8px;
+  background:#111;
+}
+
+.heat-low{
+  background:#ff3a3a;
+}
+
+.heat-mid{
+  background:#ffd000;
+}
+
+.heat-high{
+  background:#00ff88;
+}
+
 </style>
 </head>
 
@@ -699,6 +726,7 @@ font-size:8px;
               <h1>HIGH SCORE</h1>
               <div class="trophies">🏆 👑 🏆</div>
               <div id="board"></div>
+              <div id="heatmap"></div>
               <div class="insert">▲ INSERT COIN ▲</div>
             </div>
           </div>
@@ -875,7 +903,47 @@ board.innerHTML+=`
 
 if(lastTop!==null && top[0].score>lastTop) confetti();
 lastTop=top[0].score;
+renderHeatmap(data);
+}
 
+function renderHeatmap(data){
+
+  const heatmap = document.getElementById("heatmap");
+  heatmap.innerHTML = "";
+
+  const today = new Date();
+
+  for(let i=180;i>=0;i--){
+
+    const d = new Date();
+    d.setDate(today.getDate()-i);
+
+    const dateString =
+      String(d.getDate()).padStart(2,'0') + "." +
+      String(d.getMonth()+1).padStart(2,'0') + "." +
+      String(d.getFullYear()).slice(-2);
+
+    const entry = data.find(e=>e.date===dateString);
+
+    const cell = document.createElement("div");
+    cell.classList.add("heat-day");
+
+    if(entry){
+
+      if(entry.score < 0){
+        cell.classList.add("heat-low");
+      }
+      else if(entry.score < 25){
+        cell.classList.add("heat-mid");
+      }
+      else{
+        cell.classList.add("heat-high");
+      }
+
+    }
+
+    heatmap.appendChild(cell);
+  }
 }
 
 /* Fetch */
