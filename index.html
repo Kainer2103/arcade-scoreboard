@@ -957,16 +957,12 @@ function renderHeatmap(data){
     cell.classList.add("heatCell");
 
     if(entry){
-
-  const color = getScoreColor(entry.score);
-
-  cell.style.background = color;
-
-}
-
+      const color = getScoreColor(entry.score);
+      cell.style.background = color;
     }
 
     grid.appendChild(cell);
+
   }
 
 }
