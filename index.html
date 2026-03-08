@@ -657,30 +657,36 @@ font-size:8px;
   border-color:#ffcc00;
 }
 
-#heatmap{
-  margin-top:20px;
-  display:grid;
-  grid-template-columns: repeat(26, 8px);
-  grid-auto-flow: column;
-  gap:3px;
+#heatmapScreen{
+  width:100%;
+  height:100%;
+  display:flex;
   justify-content:center;
+  align-items:center;
 }
 
-.heat-day{
-  width:8px;
-  height:8px;
+#heatmapGrid{
+  display:grid;
+  grid-template-columns: repeat(53, 10px);
+  grid-template-rows: repeat(7, 10px);
+  gap:3px;
+}
+
+.heatCell{
+  width:10px;
+  height:10px;
   background:#111;
 }
 
-.heat-low{
+.heatLow{
   background:#ff3a3a;
 }
 
-.heat-mid{
+.heatMid{
   background:#ffd000;
 }
 
-.heat-high{
+.heatHigh{
   background:#00ff88;
 }
 
@@ -717,6 +723,9 @@ font-size:8px;
           
           <!-- DEIN BOARD BEGINNT HIER -->
           <div class="container">
+            <div id="heatmapScreen" style="display:none;">
+              <div id="heatmapGrid"></div>
+            </div>
             <div class="frame">
               <div class="filters">
                 <span data-filter="all" class="active">ALL</span>
@@ -748,7 +757,9 @@ font-size:8px;
 
   <div class="buttons">
     <div class="button-ring"><div class="btn"></div></div>
-    <div class="button-ring"><div class="btn"></div></div>
+    <div class="button-ring">
+      <div class="btn" id="heatmapBtn"></div>
+    </div>
     <div class="button-ring">
       <div class="btn" id="soundToggle">
     <span class="btn-label">🔊</span>
@@ -908,12 +919,12 @@ renderHeatmap(data);
 
 function renderHeatmap(data){
 
-  const heatmap = document.getElementById("heatmap");
-  heatmap.innerHTML = "";
+  const grid = document.getElementById("heatmapGrid");
+  grid.innerHTML = "";
 
   const today = new Date();
 
-  for(let i=180;i>=0;i--){
+  for(let i=364;i>=0;i--){
 
     const d = new Date();
     d.setDate(today.getDate()-i);
@@ -926,24 +937,25 @@ function renderHeatmap(data){
     const entry = data.find(e=>e.date===dateString);
 
     const cell = document.createElement("div");
-    cell.classList.add("heat-day");
+    cell.classList.add("heatCell");
 
     if(entry){
 
       if(entry.score < 0){
-        cell.classList.add("heat-low");
+        cell.classList.add("heatLow");
       }
       else if(entry.score < 25){
-        cell.classList.add("heat-mid");
+        cell.classList.add("heatMid");
       }
       else{
-        cell.classList.add("heat-high");
+        cell.classList.add("heatHigh");
       }
 
     }
 
-    heatmap.appendChild(cell);
+    grid.appendChild(cell);
   }
+  renderHeatmap(data);
 }
 
 /* Fetch */
@@ -1128,6 +1140,31 @@ soundBtn.addEventListener("click", (e) => {
     soundBtn.querySelector(".btn-label").textContent = "🔇";
   }
 }); 
+
+const heatBtn = document.getElementById("heatmapBtn");
+
+heatBtn.addEventListener("click", ()=>{
+
+  const boardContainer = document.querySelector(".container");
+  const heatmap = document.getElementById("heatmapScreen");
+
+  if(screenMode !== "heatmap"){
+
+    boardContainer.style.display="none";
+    heatmap.style.display="flex";
+
+    screenMode = "heatmap";
+
+  }else{
+
+    heatmap.style.display="none";
+    boardContainer.style.display="block";
+
+    screenMode = "scoreboard";
+
+  }
+
+});
 
 </script>
 
