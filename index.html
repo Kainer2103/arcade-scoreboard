@@ -720,12 +720,13 @@ font-size:8px;
   preload="auto">
   <source src="motive-video.mp4" type="video/mp4">
 </video>
-          
+ 
+<!-- HEATMAP SCREEN -->
+<div id="heatmapScreen" style="display:none;">
+  <div id="heatmapGrid"></div>
+</div>
           <!-- DEIN BOARD BEGINNT HIER -->
           <div class="container">
-            <div id="heatmapScreen" style="display:none;">
-              <div id="heatmapGrid"></div>
-            </div>
             <div class="frame">
               <div class="filters">
                 <span data-filter="all" class="active">ALL</span>
@@ -787,6 +788,7 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzWlByVkCzcn8b
 const board = document.getElementById("board");
 let lastTop = null;
 let currentFilter = "all"; // all | month | week
+let screenMode = "scoreboard";
 
 /* Loading UI */
 function showLoading(){
@@ -955,7 +957,6 @@ function renderHeatmap(data){
 
     grid.appendChild(cell);
   }
-  renderHeatmap(data);
 }
 
 /* Fetch */
