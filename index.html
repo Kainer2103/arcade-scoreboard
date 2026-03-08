@@ -958,15 +958,11 @@ function renderHeatmap(data){
 
     if(entry){
 
-      if(entry.score < 0){
-        cell.classList.add("heatLow");
-      }
-      else if(entry.score < 25){
-        cell.classList.add("heatMid");
-      }
-      else{
-        cell.classList.add("heatHigh");
-      }
+  const color = getScoreColor(entry.score);
+
+  cell.style.background = color;
+
+}
 
     }
 
@@ -1182,6 +1178,20 @@ heatBtn.addEventListener("click", ()=>{
   }
 
 });
+
+function getScoreColor(score){
+
+  const min = -10;
+  const max = 40;
+
+  const clamped = Math.max(min, Math.min(max, score));
+
+  const normalized = (clamped - min) / (max - min);
+
+  const hue = normalized * 120;
+
+  return `hsl(${hue}, 90%, 45%)`;
+}
 
 </script>
 
