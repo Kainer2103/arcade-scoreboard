@@ -755,6 +755,38 @@ inset 0 0 4px #000,
 
   text-shadow:0 0 4px #00f5ff;
 }
+
+.heatLegend{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+margin-top:12px;
+font-size:7px;
+color:#00f5ff;
+text-shadow:0 0 6px #00f5ff;
+}
+
+.legendBar{
+width:120px;
+height:10px;
+border-radius:4px;
+
+background:linear-gradient(
+to right,
+hsl(0,95%,35%),      /* rot */
+hsl(20,95%,45%),     /* orange */
+hsl(45,95%,55%),     /* gelb */
+hsl(90,95%,50%),     /* hellgrün */
+hsl(120,95%,45%),    /* grün */
+hsl(140,95%,45%)     /* neon grün */
+);
+
+box-shadow:
+0 0 8px rgba(0,255,200,0.5),
+inset 0 0 6px rgba(0,0,0,0.7);
+}
+
 </style>
 </head>
 
@@ -807,6 +839,13 @@ inset 0 0 4px #000,
 </div>
 
 <div id="heatmapGrid"></div>
+<div class="heatLegend">
+
+<span>-10</span>
+<div class="legendBar"></div>
+<span>40</span>
+
+</div>
 
 </div>
           <!-- DEIN BOARD BEGINNT HIER -->
