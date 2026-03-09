@@ -1037,8 +1037,6 @@ function renderHeatmap(data){
 
   for(let day = 1; day <= daysInMonth; day++){
 
-    const d = new Date(selectedYear, selectedMonth, day);
-
     const dateString =
       String(day).padStart(2,'0') + "." +
       String(selectedMonth+1).padStart(2,'0') + "." +
@@ -1050,7 +1048,14 @@ function renderHeatmap(data){
     cell.classList.add("heatCell");
 
     if(entry){
-      cell.style.background = getScoreColor(entry.score);
+
+      const color = getScoreColor(entry.score);
+      cell.style.background = color;
+
+      if(entry.score > 30){
+        cell.style.boxShadow = "0 0 10px " + color + ", 0 0 20px " + color;
+      }
+
     }
 
     cell.addEventListener("mouseenter",()=>{
@@ -1058,17 +1063,9 @@ function renderHeatmap(data){
       tooltip.style.display="block";
 
       if(entry){
-        const color = getScoreColor(entry.score);
-
-        cell.style.background = color;
-
-      if(entry.score > 30){
-        cell.style.boxShadow = "0 0 6px " + color;
-        tooltip.innerHTML =
-          entry.date + "<br>Score: " + entry.score;
+        tooltip.innerHTML = entry.date + "<br>Score: " + entry.score;
       }else{
-        tooltip.innerHTML =
-          dateString + "<br>No Data";
+        tooltip.innerHTML = dateString + "<br>No Data";
       }
 
     });
@@ -1091,8 +1088,6 @@ function renderHeatmap(data){
   }
 
 }
-
-
 
 async function load(){
 
