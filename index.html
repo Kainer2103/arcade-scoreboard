@@ -861,7 +861,27 @@ inset 0 0 4px #000,
 
 <script>
 
+  let selectedMonth = new Date().getMonth();
+  let selectedYear = new Date().getFullYear();
+
 const music = document.getElementById("bgMusic");
+
+document.querySelectorAll(".monthSelector span").forEach(btn=>{
+
+  btn.addEventListener("click", ()=>{
+
+    selectedMonth = Number(btn.dataset.month);
+
+    document.querySelectorAll(".monthSelector span")
+      .forEach(b=>b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    load(); // neu rendern
+
+  });
+
+});
 
 /* =============================
    GOOGLE SHEET CSV LINK
@@ -1005,24 +1025,21 @@ renderHeatmap(data);
 
 function renderHeatmap(data){
 
-  const today = new Date();
-  const day = today.getDay();
-  const offset = day === 0 ? 6 : day - 1;
-
-  const tooltip = document.getElementById("heatTooltip");
   const grid = document.getElementById("heatmapGrid");
+  const tooltip = document.getElementById("heatTooltip");
 
   grid.innerHTML = "";
 
-  for(let i = 83 + offset; i >= offset; i--){
+  const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
 
-    const d = new Date();
-    d.setDate(today.getDate() - i);
+  for(let day = 1; day <= daysInMonth; day++){
+
+    const d = new Date(selectedYear, selectedMonth, day);
 
     const dateString =
-      String(d.getDate()).padStart(2,'0') + "." +
-      String(d.getMonth()+1).padStart(2,'0') + "." +
-      String(d.getFullYear()).slice(-2);
+      String(day).padStart(2,'0') + "." +
+      String(selectedMonth+1).padStart(2,'0') + "." +
+      String(selectedYear).slice(-2);
 
     const entry = data.find(e => e.date === dateString);
 
@@ -1030,18 +1047,17 @@ function renderHeatmap(data){
     cell.classList.add("heatCell");
 
     if(entry){
-      const color = getScoreColor(entry.score);
-      cell.style.background = color;
+      cell.style.background = getScoreColor(entry.score);
     }
 
     cell.addEventListener("mouseenter",()=>{
 
-      tooltip.style.display = "block";
+      tooltip.style.display="block";
 
       if(entry){
         tooltip.innerHTML =
           entry.date + "<br>Score: " + entry.score;
-      } else {
+      }else{
         tooltip.innerHTML =
           dateString + "<br>No Data";
       }
@@ -1057,7 +1073,7 @@ function renderHeatmap(data){
 
     cell.addEventListener("mouseleave",()=>{
 
-      tooltip.style.display = "none";
+      tooltip.style.display="none";
 
     });
 
@@ -1065,18 +1081,6 @@ function renderHeatmap(data){
 
   }
 
-}
-
-/* Fetch */
-async function load(){
-showLoading();
-try{
-const r=await fetch(CSV_URL+"&t="+Date.now());
-const t=await r.text();
-render(parseCSV(t));
-}catch(e){
-showError();
-}
 }
 
 /* =============================
@@ -1106,9 +1110,6 @@ document.addEventListener("keyup", ()=>{
   stick.style.transform = "rotateX(0deg)";
 });
 
-/* =============================
-   Music Player
-============================= */
 /* =============================
    Music Player
 ============================= */
