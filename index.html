@@ -1058,6 +1058,12 @@ function renderHeatmap(data){
       tooltip.style.display="block";
 
       if(entry){
+        const color = getScoreColor(entry.score);
+
+        cell.style.background = color;
+
+      if(entry.score > 30){
+        cell.style.boxShadow = "0 0 6px " + color;
         tooltip.innerHTML =
           entry.date + "<br>Score: " + entry.score;
       }else{
@@ -1308,12 +1314,42 @@ function getScoreColor(score){
   const max = 40;
 
   const clamped = Math.max(min, Math.min(max, score));
+  const n = (clamped - min) / (max - min);
 
-  const normalized = (clamped - min) / (max - min);
+  let hue;
+  let light;
 
-  const hue = normalized * 120;
+  if(n < 0.15){
+    hue = 0;       // dunkelrot
+    light = 25;
+  }
+  else if(n < 0.30){
+    hue = 10;      // rot
+    light = 35;
+  }
+  else if(n < 0.45){
+    hue = 25;      // orange
+    light = 45;
+  }
+  else if(n < 0.60){
+    hue = 45;      // gelb
+    light = 55;
+  }
+  else if(n < 0.75){
+    hue = 80;      // hellgrün
+    light = 50;
+  }
+  else if(n < 0.90){
+    hue = 110;     // grün
+    light = 45;
+  }
+  else{
+    hue = 140;     // neon grün
+    light = 45;
+  }
 
-  return `hsl(${hue}, 90%, 45%)`;
+  return `hsl(${hue}, 95%, ${light}%)`;
+
 }
 
 </script>
