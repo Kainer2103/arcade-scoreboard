@@ -863,6 +863,9 @@ inset 0 0 4px #000,
 
   let selectedMonth = new Date().getMonth();
   let selectedYear = new Date().getFullYear();
+  document.querySelector(
+  `.monthSelector span[data-month="${selectedMonth}"]`
+).classList.add("active");
 
 const music = document.getElementById("bgMusic");
 
@@ -1083,6 +1086,29 @@ function renderHeatmap(data){
 
 }
 
+
+
+async function load(){
+
+  showLoading();
+
+  try{
+
+    const r = await fetch(CSV_URL + "&t=" + Date.now());
+    const t = await r.text();
+
+    const data = parseCSV(t);
+
+    render(data);
+
+  }catch(e){
+
+    console.error(e);
+    showError();
+
+  }
+
+}
 /* =============================
    JOYSTICK CONTROL
 ============================= */
