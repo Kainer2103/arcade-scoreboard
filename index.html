@@ -807,6 +807,50 @@ inset 0 0 6px rgba(0,0,0,0.7);
   filter:brightness(1.25);
 }
 
+/* PIXEL HEATMAP BUTTON */
+
+.heatmap-btn{
+
+  background: radial-gradient(
+    circle at 30% 30%,
+    #00f5ff 0%,
+    #008cff 60%,
+    #002b55 100%
+  );
+
+  box-shadow:
+    0 6px 0 #002f6c,
+    0 8px 12px rgba(0,0,0,0.8),
+    inset -4px -6px 8px rgba(0,0,0,0.6),
+    inset 3px 3px 6px rgba(255,255,255,0.2);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.pixel-grid{
+  display:grid;
+  grid-template-columns:repeat(3,5px);
+  grid-template-rows:repeat(3,5px);
+  gap:2px;
+}
+
+.pixel-grid div{
+  width:5px;
+  height:5px;
+  background:#00f5ff;
+  box-shadow:0 0 4px #00f5ff;
+}
+
+/* kleine Heatmap Variation */
+
+.pixel-grid div:nth-child(2){ background:#66ff66 }
+.pixel-grid div:nth-child(3){ background:#aaff00 }
+.pixel-grid div:nth-child(5){ background:#ffee00 }
+.pixel-grid div:nth-child(8){ background:#ff8800 }
+.pixel-grid div:nth-child(9){ background:#ff3300 }
+
 </style>
 </head>
 
@@ -900,20 +944,31 @@ inset 0 0 6px rgba(0,0,0,0.7);
 
 
   <div class="buttons">
-    <div class="button-ring"><div class="btn"></div></div>
-    <div class="button-ring">
-      <div class="btn" id="heatmapBtn"></div>
-        <span class="btn-label">▦</span>
-          <div class="button-ring">
-      <div class="btn" id="soundToggle">
-    <span class="btn-label">🔊</span>
+
+  <div class="button-ring">
+    <div class="btn"></div>
+  </div>
+
+  <div class="button-ring">
+    <div class="btn heatmap-btn" id="heatmapBtn">
+      <div class="pixel-grid">
+        <div></div><div></div><div></div>
+        <div></div><div></div><div></div>
+        <div></div><div></div><div></div>
+      </div>
     </div>
   </div>
-    <div class="button-ring">
-  <div class="btn" id="playCutscene">
-    <span class="btn-label">▶</span>
+
+  <div class="button-ring">
+    <div class="btn" id="soundToggle">
+      <span class="btn-label">🔊</span>
+    </div>
   </div>
-</div>
+
+  <div class="button-ring">
+    <div class="btn" id="playCutscene">
+      <span class="btn-label">▶</span>
+    </div>
   </div>
 
 </div>
