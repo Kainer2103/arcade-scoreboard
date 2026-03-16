@@ -851,6 +851,37 @@ inset 0 0 6px rgba(0,0,0,0.7);
 .pixel-grid div:nth-child(8){ background:#ff8800 }
 .pixel-grid div:nth-child(9){ background:#ff3300 }
 
+.coin-slot{
+width:50px;
+height:6px;
+background:#000;
+border-radius:3px;
+position:absolute;
+left:90px;
+bottom:60px;
+
+box-shadow:
+inset 0 2px 4px #000,
+0 0 6px rgba(255,255,255,0.15);
+cursor:pointer;
+}
+
+.coin{
+width:26px;
+height:26px;
+border-radius:50%;
+background:radial-gradient(circle at 30% 30%, #ffd700, #c9a000);
+position:absolute;
+left:102px;
+bottom:140px;
+
+display:none;
+
+box-shadow:
+0 0 10px gold,
+inset -2px -3px 5px rgba(0,0,0,0.5);
+}
+
 </style>
 </head>
 
@@ -945,9 +976,8 @@ inset 0 0 6px rgba(0,0,0,0.7);
 
   <div class="buttons">
 
-  <div class="button-ring">
-    <div class="btn"></div>
-  </div>
+  <div class="coin-slot" id="coinSlot"></div>
+  <div class="coin" id="coin"></div>
 
   <div class="button-ring">
     <div class="btn heatmap-btn" id="heatmapBtn">
@@ -1274,9 +1304,6 @@ function startMusic() {
   }
 }
 
-load();
-setInterval(load, 30000);
-
 /* =============================
    VIDEO MODE
 ============================= */
@@ -1459,6 +1486,60 @@ function getScoreColor(score){
   }
 
   return `hsl(${hue}, 95%, ${light}%)`;
+
+}
+
+const slot = document.getElementById("coinSlot");
+const coin = document.getElementById("coin");
+
+slot.addEventListener("click", insertCoin);
+
+function insertCoin(){
+
+coin.style.display = "block";
+coin.style.transition = "none";
+coin.style.transform = "translateY(0px)";
+
+setTimeout(()=>{
+
+coin.style.transition = "transform 0.6s ease-in";
+coin.style.transform = "translateY(80px)";
+
+},20);
+
+setTimeout(()=>{
+
+coin.style.display = "none";
+coinInserted();
+
+},600);
+
+}
+
+function coinInserted(){
+
+const coinSound = new Audio("coin.mp3");
+coinSound.play();
+
+arcadeBoot();
+
+}
+
+function arcadeBoot(){
+
+const screen = document.querySelector(".screen-content");
+
+screen.innerHTML = `
+<div style="text-align:center;margin-top:120px;font-size:12px;color:#00f5ff">
+SYSTEM BOOTING...
+</div>
+`;
+
+setTimeout(()=>{
+
+setInterval(load,30000);
+
+},1200);
 
 }
 
