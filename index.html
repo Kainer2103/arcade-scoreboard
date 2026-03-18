@@ -852,18 +852,51 @@ inset 0 0 6px rgba(0,0,0,0.7);
 .pixel-grid div:nth-child(9){ background:#ff3300 }
 
 .coin-slot{
-width:60px;
-height:8px;
-background:#000;
+width:10px;
+height:40px;
+background:linear-gradient(#111,#000);
 border-radius:4px;
-position:absolute;
-left:120px;
-bottom:50px;
+position:relative;
 
 box-shadow:
-inset 0 2px 4px #000,
-0 0 6px rgba(255,255,255,0.15);
+inset 0 0 6px #000,
+0 0 6px rgba(255,255,255,0.1);
+
 cursor:pointer;
+}
+
+/* Metallrahmen */
+.coin-slot::before{
+content:"";
+position:absolute;
+inset:-6px;
+border-radius:6px;
+
+background:linear-gradient(
+145deg,
+#888,
+#222
+);
+
+box-shadow:
+0 4px 8px rgba(0,0,0,0.8),
+inset 0 0 6px rgba(255,255,255,0.2);
+}
+
+/* Schlitz innen */
+.coin-slot::after{
+content:"";
+position:absolute;
+top:6px;
+bottom:6px;
+left:2px;
+right:2px;
+
+background:#000;
+border-radius:3px;
+
+box-shadow:
+inset 0 0 6px #000;
 }
 
 .coin{
@@ -880,6 +913,12 @@ display:none;
 box-shadow:
 0 0 10px gold,
 inset -2px -3px 5px rgba(0,0,0,0.5);
+}
+
+.coin-slot:hover{
+box-shadow:
+0 0 10px #00f5ff,
+inset 0 0 6px #000;
 }
 
 </style>
@@ -976,7 +1015,9 @@ inset -2px -3px 5px rgba(0,0,0,0.5);
 
   <div class="buttons">
 
+  <div class="button-ring">
   <div class="coin-slot" id="coinSlot"></div>
+</div>
   <div class="coin" id="coin"></div>
 
   <div class="button-ring">
@@ -1526,31 +1567,6 @@ arcadeBoot();
 }
 
 let coinUsed = false;
-
-function insertCoin(){
-
-if(coinUsed) return;
-coinUsed = true;
-
-coin.style.display = "block";
-coin.style.transition = "none";
-coin.style.transform = "translateY(0px)";
-
-setTimeout(()=>{
-
-coin.style.transition = "transform 0.6s ease-in";
-coin.style.transform = "translateY(80px)";
-
-},20);
-
-setTimeout(()=>{
-
-coin.style.display = "none";
-coinInserted();
-
-},600);
-
-}
 
 function arcadeBoot(){
 
