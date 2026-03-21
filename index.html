@@ -904,9 +904,15 @@ width:26px;
 height:26px;
 border-radius:50%;
 background:radial-gradient(circle at 30% 30%, #ffd700, #c9a000);
+
 position:absolute;
-left:102px;
-bottom:140px;
+
+/* exakt zentriert über Slot */
+left:50%;
+transform:translateX(-50%);
+
+/* Start über dem Slot */
+top:-40px;
 
 display:none;
 
@@ -919,6 +925,10 @@ inset -2px -3px 5px rgba(0,0,0,0.5);
 box-shadow:
 0 0 10px #00f5ff,
 inset 0 0 6px #000;
+}
+
+.coin-wrapper{
+position:relative;
 }
 
 </style>
@@ -1015,9 +1025,9 @@ inset 0 0 6px #000;
 
   <div class="buttons">
 
-  <div class="button-ring">
+  <div class="button-ring coin-wrapper">
+
   <div class="coin-slot" id="coinSlot"></div>
-</div>
   <div class="coin" id="coin"></div>
 
   <div class="button-ring">
@@ -1539,22 +1549,19 @@ function insertCoin(){
 
 coin.style.display = "block";
 coin.style.transition = "none";
-coin.style.transform = "translateY(0px)";
+coin.style.transform = "translate(-50%, 0px)";
 
 setTimeout(()=>{
-
 coin.style.transition = "transform 0.6s ease-in";
-coin.style.transform = "translateY(80px)";
-
+coin.style.transform = "translate(-50%, 80px)";
 },20);
 
 setTimeout(()=>{
-
 coin.style.display = "none";
 coinInserted();
-
 },600);
 
+slot.style.boxShadow = "0 0 12px #00f5ff";
 }
 
 function coinInserted(){
