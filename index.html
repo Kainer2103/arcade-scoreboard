@@ -900,30 +900,45 @@ inset 0 0 6px #000;
 }
 
 .coin{
-width:26px;
-height:26px;
-border-radius:50%;
-background:radial-gradient(circle at 30% 30%, #ffd700, #c9a000);
-transform-style: preserve-3d;
-  transform-origin: center;
+  position:absolute;
+  left:50%;
+  top:-40px;
+  transform:translateX(-50%);
+  transform-style:preserve-3d;
+  perspective:800px;
 
-  /* wichtig für smooth rotation */
-  backface-visibility: hidden;
+  width:26px;
+  height:26px;
 
-position:absolute;
+  display:none;
+}
 
-/* exakt zentriert über Slot */
-left:50%;
-transform:translateX(-50%);
+/* Vorderseite */
+.coin-face{
+  position:absolute;
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, #ffd700, #c9a000);
 
-/* Start über dem Slot */
-top:-40px;
+  backface-visibility:hidden;
+}
 
-display:none;
+.coin-face.back{
+  transform:rotateY(180deg);
+}
 
-box-shadow:
-0 0 10px gold,
-inset -2px -3px 5px rgba(0,0,0,0.5);
+/* Kante (DICKE) */
+.coin-edge{
+  position:absolute;
+  width:6px;              /* 👈 Dicke */
+  height:26px;
+  left:50%;
+  transform:translateX(-50%) rotateY(90deg);
+
+  background:linear-gradient(#999,#333);
+
+  border-radius:2px;
 }
 
 .coin-slot:hover{
@@ -1034,7 +1049,11 @@ perspective:600px;
   <!-- Coin Slot -->
   <div class="button-ring coin-wrapper">
     <div class="coin-slot" id="coinSlot"></div>
-    <div class="coin" id="coin"></div>
+    <div class="coin" id="coin">
+  <div class="coin-face front"></div>
+  <div class="coin-face back"></div>
+  <div class="coin-edge"></div>
+</div>
   </div>
 
   <!-- Heatmap Button -->
@@ -1560,21 +1579,22 @@ function insertCoin(){
 coin.style.display = "block";
 coin.style.transition = "none";
 
-coin.style.transform = "translate(-50%, 0px) rotateX(0deg)";
+/* Start: flach sichtbar */
+coin.style.transform = "translate(-50%, 0px) rotateY(0deg)";
 
 setTimeout(()=>{
 
 coin.style.transition = "transform 0.6s ease-in";
 
-/* schöner Übergang */
-coin.style.transform = "translate(-50%, 60px) rotateX(70deg)";
+/* Coin kippt zur Seite */
+coin.style.transform = "translate(-50%, 60px) rotateY(70deg)";
 
 },50);
 
 setTimeout(()=>{
 
-/* 🔥 hier kommt dein gewünschter Effekt */
-coin.style.transform = "translate(-50%, 85px) rotateX(90deg) rotateZ(20deg) scaleY(0.2)";
+/* Jetzt sieht man NUR die Kante (wie dein Foto!) */
+coin.style.transform = "translate(-50%, 85px) rotateY(90deg)";
 
 },400);
 
@@ -1584,6 +1604,8 @@ coin.style.display = "none";
 coinInserted();
 
 },650);
+
+}
 
 slot.style.boxShadow = "0 0 12px #00f5ff";
 
