@@ -931,7 +931,7 @@ inset 0 0 6px #000;
 /* Kante (DICKE) */
 .coin-edge{
   position:absolute;
-  width:6px;              /* 👈 Dicke */
+  width:10px;              /* 👈 Dicke */
   height:26px;
   left:50%;
   transform:translateX(-50%) rotateY(90deg);
@@ -1579,21 +1579,17 @@ function insertCoin(){
 coin.style.display = "block";
 coin.style.transition = "none";
 
-/* Start: flach sichtbar */
 coin.style.transform = "translate(-50%, 0px) rotateY(0deg)";
 
 setTimeout(()=>{
 
 coin.style.transition = "transform 0.6s ease-in";
-
-/* Coin kippt zur Seite */
 coin.style.transform = "translate(-50%, 60px) rotateY(70deg)";
 
 },50);
 
 setTimeout(()=>{
 
-/* Jetzt sieht man NUR die Kante (wie dein Foto!) */
 coin.style.transform = "translate(-50%, 85px) rotateY(90deg)";
 
 },400);
@@ -1605,12 +1601,11 @@ coinInserted();
 
 },650);
 
-}
-
+/* 👉 HIER rein */
 slot.style.boxShadow = "0 0 12px #00f5ff";
 
 setTimeout(()=>{
-slot.style.boxShadow = "";
+  slot.style.boxShadow = "";
 },200);
 
 }
